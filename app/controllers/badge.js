@@ -2,85 +2,92 @@ module.exports = function(db){
     const express = require('express');
     const router = express.Router();
     const TABLE = "badge";
+    let model = require('../models/sqlite_model')(db);
 
     //{{SERVER}}/badge/create_badge
-    router.get('/initialize', function(request, response){
-        db.serialize(function(){
-            db.run("CREATE TABLE IF NOT EXISTS "+TABLE+" (id_badge TEXT, name_badge TEXT, desc_badge TEXT, image_badge TEXT)");
-            response.send("Inicializada");
-        });
+    router.post('/initialize', function(request, response){
+        model.initialize(TABLE, request.body)
+        .then((rows)=>{
+            response.send(rows);
+        })
+        .catch((error)=>{
+            response.send(error);
+        })
     });
 
     //{{SERVER}}/badge/delete_badge
-    router.get('/clean', function(request, response){
-        db.serialize(function(){
-            db.run("DROP TABLE IF EXISTS "+TABLE);
-            response.send("Tabla insignias eliminada");
+    router.get('/option/clean', function(request, response){
+        model.clean(TABLE)
+        .then((message)=>{
+            response.send(message);
+        })
+        .catch((error)=>{
+            response.send(error);
+            console.error(error);
         });
+        /**/
     });
     
     //{{SERVER}}/badge/insert_badge
     router.post('/insert', function(request, response){
-        db.serialize(function(){
-            db.run("INSERT INTO "+TABLE+" VALUES ('"+
-            request.body.id_badge+"', '"+
-            request.body.name_badge+"', '"+
-            request.body.desc_badge+"', '"+
-            request.body.image_badge            
-            +"')");
-            response.send("Insignia insertada: "+request.body.name_badge);
+        model.create(TABLE, request.body)
+        .then((rows)=>{
+            response.send(rows);
+        })
+        .catch((error)=>{
+            console.error(error);
+            response.send(error);
         });
+        
     });
     
     //{{SERVER}}/badge/insert_badge
-    router.put('/update', function(request, response){
-        db.serialize(function(){
-            db.run("UPDATE "+TABLE+" SET name_badge = '"+request.body.name_badge+"', desc_badge='"+
-            request.body.desc_badge+"', image_badge='"+request.body.image_badge+"' WHERE id_badge = '"+
-            request.body.id_badge            
-            +"'");
-            response.send("Insignia editada: "+request.body.name_badge);
+    router.put('/:id', function(request, response){
+        let id = request.params.id;
+        model.update(TABLE, request.body, id)
+        .then((row)=>{
+            response.send(row);
+        })
+        .catch((error)=>{
+            console.log(error);
+            response.send(error);
         });
+        
     });
 
     //{{SERVER}}/badge/list_badge
     router.get('/list', function(request, response){
-        db.serialize(function(){
-            db.all("SELECT * FROM "+TABLE, function(error, rows){
-                if(error){
-                    response.send(error);
-                }else{
-                    response.send(rows);
-                }
-            });
+        model.getAll(TABLE)
+        .then((rows)=>{
+            response.send(rows);
+        })
+        .catch((error)=>{
+            response.send(error);
         });
     });
 
     //{{SERVER}}/badge/list_badge
     router.get('/:id', function(request, response){
         let id = request.params.id;
-        db.serialize(function(){
-            db.all("SELECT * FROM "+TABLE+" WHERE id_badge = '"+id+"'", function(error, rows){
-                if(error){
-                    response.send(error);
-                }else{
-                    response.send(rows);
-                }
-            });
+        model.getById(TABLE, id)
+        .then((row)=>{
+            response.send(row);
+        })
+        .catch((error)=>{
+            console.error(error);
+            response.send(error);
         });
     });
 
     //{{SERVER}}/badge/list_badge
     router.delete('/:id', function(request, response){
         let id = request.params.id;
-        db.serialize(function(){
-            db.all("DELETE FROM "+TABLE+" WHERE id_badge = '"+id+"'", function(error, rows){
-                if(error){
-                    response.send(error);
-                }else{
-                    response.send(rows);
-                }
-            });
+        model.delete(TABLE, id)
+        .then((message)=>{
+            response.send(message);
+        })
+        .catch((error)=>{
+            response.send(error);
         });
     });
 
