@@ -1,94 +1,96 @@
-module.exports= function(db){
-
+module.exports = function(db){
     const express = require('express');
     const router = express.Router();
-    const TABLE = 'trainings';
+    const TABLE = "trainings";
+    let model = require('../models/sqlite_model')(db);
 
-    //to create table
-    router.get('/initialize',  function(request, response){
-        db.serialize(function () {
-            db.run('CREATE TABLE IF NOT EXISTS '+TABLE+' (id INT, language TEXT, level TEXT, title TEXT, content TEXT )');        
-            response.send('tranings table has been created!');
+    //inicializar la tabla con las llaves y valores de cada clase
+    router.post('/initialize', function(request, response){
+        model.initialize(TABLE, request.body)
+        .then((rows)=>{
+            response.send(rows);
+        })
+        .catch((error)=>{
+            response.send(error);
+        })
+    });
+
+    //limpiar la tabla
+    router.get('/option/clean', function(request, response){
+        model.clean(TABLE)
+        .then((message)=>{
+            response.send(message);
+        })
+        .catch((error)=>{
+            response.send(error);
+            console.error(error);
         });
+        /**/
     });
     
-    //to clean table
-    router.get('/clean', function(request, response){
-        db.serialize(function(){
-            db.run('DROP TABLE IF EXISTS '+TABLE);
-            response.send('trainings table has been cleaned!');
-        });
-    });
-    
-    //to create a new training
-    router.post('/', function(request, response){
-        db.serialize(function(){
-            db.run('INSERT INTO '+TABLE+' values ('
-            +request.body.id+',"'
-            +request.body.language+'","'
-            +request.body.level+'","'
-            +request.body.title+'","'
-            +request.body.content+'")');        
-            response.send('Se ha agregado el entrenamiento: '+request.body.id+', '+request.body.language + ', '+request.body.level+ ', '+request.body.title+', '+request.body.content);
+    //crear un nuevo entrenamiento
+    router.post('/insert', function(request, response){
+        model.create(TABLE, request.body)
+        .then((rows)=>{
+            response.send(rows);
+        })
+        .catch((error)=>{
+            console.error(error);
+            response.send(error);
         });
         
     });
     
-    //to list trainings
-    router.get('/', function (request, response) {
+    //actualizar información por id
+    router.put('/:id', function(request, response){
+        let id = request.params.id;
+        model.update(TABLE, request.body, id)
+        .then((row)=>{
+            response.send(row);
+        })
+        .catch((error)=>{
+            console.log(error);
+            response.send(error);
+        });
         
-        db.serialize(function () {
-    
-            db.all("SELECT * FROM "+TABLE, function(error, rows){
-                if(error){
-                    response.send(error);
-                }else{
-                    response.send(rows);
-                }
-            });
-    
+    });
+
+    //Listar los entrenamientos
+    router.get('/list', function(request, response){
+        model.getAll(TABLE)
+        .then((rows)=>{
+            response.send(rows);
+        })
+        .catch((error)=>{
+            response.send(error);
         });
     });
 
-    //to edit a training
-    router.put('/', function (request, response) {
-        //console.log(request.body);
-        db.serialize(function () {            
-            db.run("UPDATE "+TABLE+" SET language='"+request.body.language+"',level='"+request.body.level+"',title='"+request.body.title+"',content='"+request.body.content+"' WHERE id="+request.body.id);
-            response.send('Se actualizo la tabla '+TABLE +' con la información: ' + request.body.id + ', ' + request.body.language + ', ' + request.body.level + ', ' + request.body.title+', '+request.body.content);
-        });
-
-    });
-
-    //to see a traning
-    router.get('/:id', function (request, response) {
-        let id = request.params.id;        
-        db.serialize(function () {
-
-            db.all("SELECT * FROM "+TABLE + " WHERE id="+id, function (error, rows) {
-                if (error) {
-                    response.send(error);
-                } else {
-                    response.send(rows[0]);
-                }
-            })            
+    //Ver un entrenamiento por su id
+    router.get('/:id', function(request, response){
+        let id = request.params.id;
+        model.getById(TABLE, id)
+        .then((row)=>{
+            response.send(row);
+        })
+        .catch((error)=>{
+            console.error(error);
+            response.send(error);
         });
     });
 
-    //to delete a training
-    router.delete('/:id', function (request, response) {
-        let id = request.params.id;        
-        db.serialize(function () {
-
-            db.all("DELETE FROM "+TABLE + " WHERE id="+id, function (error, rows) {
-                if (error) {
-                    response.send(error);
-                } else {
-                    response.send(rows);
-                }
-            })            
+    //Borrar un entrenamiento por su id
+    router.delete('/:id', function(request, response){
+        let id = request.params.id;
+        model.delete(TABLE, id)
+        .then((message)=>{
+            response.send(message);
+        })
+        .catch((error)=>{
+            response.send(error);
         });
     });
+
 
     return router;
 }
