@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3456;
+const port = 3000;
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const sqliteClient = new sqlite3.Database('./db/db.bictia');
