@@ -3,11 +3,15 @@ const app = express();
 const port = 3456;
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
-let db = new sqlite3.Database('./db/db.bictia');
+const sqliteClient = new sqlite3.Database('./db/db.bictia');
+const mongodbClient = require('mongodb').MongoClient;
+const url = 'mongodb://localhost:27017';
 
-let badge_controller = require('./app/controllers/badge')(db);
-let usersController = require('./app/controllers/users')(db);
-let trainingsController = require('./app/controllers/trainings')(db);
+const databaseConfig = {"sqlite":sqliteClient, "mongodb":mongodbClient, "mongodb_url":url, "default":'mongodb'};
+
+let badge_controller = require('./app/controllers/badge')(databaseConfig);
+let usersController = require('./app/controllers/users')(databaseConfig);
+let trainingsController = require('./app/controllers/trainings')(databaseConfig);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
