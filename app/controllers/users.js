@@ -1,94 +1,111 @@
-module.exports = function (db) {
+module.exports = function (databaseConfig) {
     const express = require('express');
     const router = express.Router();
-    const TABLE = 'users';
+    const TABLE = "users";
+    let model ='';
 
-    //to create table
-    router.get('/initialize',  function(request, response){
-        db.serialize(function () {
-            db.run('CREATE TABLE IF NOT EXISTS ' +TABLE+ ' (id INT, name TEXT, lastname TEXT, email TEXT, password TEXT, level TEXT)');        
-            response.send('Users table has been created!');
-        });
+    switch (databaseConfig.default) {
+        case 'mongodb':
+            model = require("../models/mongodb_model")(databaseConfig.mongodb, databaseConfig.mongodb_url);
+            break;
+        case 'sqlite':
+            model = require('../models/sqlite_model')(databaseConfig.sqlite);
+            break;
+        default:            
+            model = require('../models/sqlite_model')(databaseConfig.sqlite);
+            break;
+
+    }
+    //
+
+
+    //{{SERVER}}/badge/create_badge
+    router.post('/initialize', function (request, response) {
+        model.initialize(TABLE, request.body)
+            .then((rows) => {
+                response.send(rows);
+            })
+            .catch((error) => {
+                response.send(error);
+            })
     });
 
-    //to clean table
-    router.get('/clean', function(request, response){
-        db.serialize(function(){
-            db.run('DROP TABLE IF EXISTS '+TABLE);
-            response.send('Users table has been cleaned!');
-        });
+    //{{SERVER}}/badge/delete_badge
+    router.get('/option/clean', function (request, response) {
+        model.clean(TABLE)
+            .then((message) => {
+                response.send(message);
+            })
+            .catch((error) => {
+                response.send(error);
+                console.error(error);
+            });
+        /**/
     });
 
-    //to create a new user
-    router.post('/', function(request, response){
-        db.serialize(function(){
-            db.run('INSERT INTO '+TABLE+' values ('
-            +request.body.id+',"'
-            +request.body.name+'","'
-            +request.body.lastname+'","'
-            +request.body.email+'","'
-            +request.body.password+'","'
-            +request.body.level+'")');        
-            response.send('Se ha agregado el usuario: ' +request.body.id + ',' +request.body.name + ', '+request.body.lastname+ ', '+request.body.email+ ', '+request.body.password+', '+request.body.level);
-        });
-        
-    });
-
-    //to list users
-    router.get('/', function (request, response) {
-        
-        db.serialize(function () {
-
-            db.all("SELECT * FROM "+TABLE, function(error, rows){
-                if(error){
-                    response.send(error);
-                }else{
-                    response.send(rows);
-                }
+    //{{SERVER}}/badge/insert_badge
+    router.post('/insert', function (request, response) {
+        model.create(TABLE, request.body)
+            .then((rows) => {
+                response.send(rows);
+            })
+            .catch((error) => {
+                console.error(error);
+                response.send(error);
             });
 
-        });
     });
 
-    //to edit users
-    router.put('/', function (request, response) {
-        //console.log(request.body);
-        db.serialize(function () {            
-            db.run("UPDATE users SET name='"+request.body.name+"',lastname='"+request.body.lastname+"',email='"+request.body.email+"',password='"+request.body.password+"',level='"+request.body.level+"' WHERE id="+request.body.id);
-            response.send('Se actualizo la tabla '+TABLE +' con la información: ' + request.body.id + ', ' + request.body.name + ', ' + request.body.lastname + ', ' + request.body.email+', '+request.body.password+', '+request.body.level);
-        });
+    //{{SERVER}}/badge/insert_badge
+    router.put('/:id', function (request, response) {
+        let id = request.params.id;
+        model.update(TABLE, request.body, id)
+            .then((row) => {
+                response.send(row);
+            })
+            .catch((error) => {
+                console.log(error);
+                response.send(error);
+            });
 
     });
 
-    //to see an user
+    //{{SERVER}}/badge/list_badge
+    router.get('/list', function (request, response) {
+        model.getAll(TABLE)
+            .then((rows) => {
+                response.send(rows);
+            })
+            .catch((error) => {
+                response.send(error);
+            });
+    });
+
+    //{{SERVER}}/badge/list_badge
     router.get('/:id', function (request, response) {
-        let id = request.params.id;        
-        db.serialize(function () {
-
-            db.all("SELECT * FROM "+TABLE + " WHERE id="+id, function (error, rows) {
-                if (error) {
-                    response.send(error);
-                } else {
-                    response.send(rows[0]);
-                }
-            })            
-        });
+        let id = request.params.id;
+        model.getById(TABLE, id)
+            .then((row) => {
+                response.send(row);
+            })
+            .catch((error) => {
+                console.error(error);
+                response.send(error);
+            });
     });
 
-    //to delete a user
+    //{{SERVER}}/badge/list_badge
     router.delete('/:id', function (request, response) {
-        let id = request.params.id;        
-        db.serialize(function () {
-
-            db.all("DELETE FROM "+TABLE + " WHERE id="+id, function (error, rows) {
-                if (error) {
-                    response.send(error);
-                } else {
-                    response.send(rows);
-                }
-            })            
-        });
+        let id = request.params.id;
+        model.delete(TABLE, id)
+            .then((message) => {
+                response.send(message);
+            })
+            .catch((error) => {
+                response.send(error);
+            });
     });
+
 
     return router;
 }

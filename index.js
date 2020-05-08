@@ -7,7 +7,7 @@ const sqliteClient = new sqlite3.Database('./db/db.bictia');
 const mongodbClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017';
 
-const databaseConfig = {"sqlite":sqliteClient, "mongodb":mongodbClient, "mongodb_url":url, "default":'mongodb'};
+const databaseConfig = {"sqlite": sqliteClient, "mongodb":mongodbClient, "mongodb_url":url, "default":'mongodb'};
 
 let badge_controller = require('./app/controllers/badge')(databaseConfig);
 let usersController = require('./app/controllers/users')(databaseConfig);

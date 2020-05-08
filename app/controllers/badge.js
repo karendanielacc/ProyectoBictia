@@ -9,10 +9,10 @@ module.exports = function (databaseConfig) {
             model = require("../models/mongodb_model")(databaseConfig.mongodb, databaseConfig.mongodb_url);
             break;
         case 'sqlite':
-            model = require('../models/sqlite_model')(db);
+            model = require('../models/sqlite_model')(databaseConfig.sqlite);
             break;
-        default:
-            model = require('../models/sqlite_model')(db);
+        default:            
+            model = require('../models/sqlite_model')(databaseConfig.sqlite);
             break;
 
     }
