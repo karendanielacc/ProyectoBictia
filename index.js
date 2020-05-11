@@ -1,13 +1,35 @@
 const express = require('express');
 const app = express();
 const port = 3456;
+
+//URL Encode support for POST, PUT methods
 const bodyParser = require('body-parser');
+
+//SQLite support
 const sqlite3 = require('sqlite3').verbose();
 const sqliteClient = new sqlite3.Database('./db/db.bictia');
+
+//Mongo support
 const mongodbClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017';
 
-const databaseConfig = {"sqlite": sqliteClient, "mongodb":mongodbClient, "mongodb_url":url, "default":'mongodb'};
+//Firebase support
+const admin = require("firebase-admin");
+const serviceAccount = require("./private/key.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://proyecto-bictia.firebaseio.com"
+});
+const firestore = admin.firestore();
+
+
+const databaseConfig = {
+    "sqlite": sqliteClient, 
+    "mongodb":mongodbClient, 
+    "mongodb_url":url, 
+    "firestore":firestore,
+    "default":'firestore'
+};
 
 let badge_controller = require('./app/controllers/badge')(databaseConfig);
 let usersController = require('./app/controllers/users')(databaseConfig);

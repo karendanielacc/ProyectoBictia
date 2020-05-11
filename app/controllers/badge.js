@@ -2,7 +2,7 @@ module.exports = function (databaseConfig) {
     const express = require('express');
     const router = express.Router();
     const TABLE = "badge";
-    let model ='';
+    let model = '';
 
     //console.dir(databaseConfig);
     switch (databaseConfig.default) {
@@ -10,10 +10,13 @@ module.exports = function (databaseConfig) {
             //console.log("entra a mongo");
             model = require("../models/mongodb_model")(databaseConfig.mongodb, databaseConfig.mongodb_url);
             break;
+        case 'firestore':
+            model = require('../models/firestore_model')(databaseConfig.firestore);
+            break;
         case 'sqlite':
             model = require('../models/sqlite_model')(databaseConfig.sqlite);
             break;
-        default:            
+        default:
             model = require('../models/sqlite_model')(databaseConfig.sqlite);
             break;
 

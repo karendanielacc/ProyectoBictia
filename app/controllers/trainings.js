@@ -2,11 +2,14 @@ module.exports = function (databaseConfig) {
     const express = require('express');
     const router = express.Router();
     const TABLE = "trainings";
-    let model ='';
+    let model = '';
 
     switch (databaseConfig.default) {
         case 'mongodb':
             model = require("../models/mongodb_model")(databaseConfig.mongodb, databaseConfig.mongodb_url);
+            break;
+        case 'firestore':
+            model = require('../models/firestore_model')(databaseConfig.firestore);
             break;
         case 'sqlite':
             console.log(1);
