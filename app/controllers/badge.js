@@ -4,8 +4,10 @@ module.exports = function (databaseConfig) {
     const TABLE = "badge";
     let model ='';
 
+    //console.dir(databaseConfig);
     switch (databaseConfig.default) {
         case 'mongodb':
+            //console.log("entra a mongo");
             model = require("../models/mongodb_model")(databaseConfig.mongodb, databaseConfig.mongodb_url);
             break;
         case 'sqlite':
@@ -74,9 +76,11 @@ module.exports = function (databaseConfig) {
     router.get('/list', function (request, response) {
         model.getAll(TABLE)
             .then((rows) => {
+                //console.log("entró a listar");
                 response.send(rows);
             })
             .catch((error) => {
+                //console.log("entró al error");
                 response.send(error);
             });
     });

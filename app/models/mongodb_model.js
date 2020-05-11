@@ -1,22 +1,24 @@
 let ObjectId = require('mongodb').ObjectId;
 
-const MongoDBModel = function (s, url) {
+const MongoDBModel = function (MongoClient, url) {
     // Database Name
     const dbName = 'myproject';
 
-    const MongoClient = require('mongodb').MongoClient;
+    //const MongoClient = require('mongodb').MongoClient;
 
 
     this.getAll = function (table) {
         return new Promise((resolve, reject) => {
             MongoClient.connect(url, function (error, client) {
                 if (error) {
+                    //console.log("error");
                     console.error(error);
                     reject(error);
                 } else {
                     let database = client.db(dbName);
                     const collection = database.collection(table);                    
                     collection.find({}).toArray(function(errorGetAll, result){
+                        console.log(result);
                         resolve(result);
                         client.close();
                     });
