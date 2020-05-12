@@ -34,9 +34,11 @@ const databaseConfig = {
 let badge_controller = require('./app/controllers/badge')(databaseConfig);
 let usersController = require('./app/controllers/users')(databaseConfig);
 let trainingsController = require('./app/controllers/trainings')(databaseConfig);
+let advancesController = require('./app/controllers/advances')(databaseConfig);   // New
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+app.use('/advances', advancesController);  // New
 
 app.use('/users', usersController);
 app.use('/trainings', trainingsController);
