@@ -1,32 +1,10 @@
-module.exports = function (databaseConfig) {
+const Controller = function(TABLE){
     const express = require('express');
     const router = express.Router();
-    const TABLE = "trainings";
 
-    const general = require("../utils/general")();
-    //general.setDefaultDatabase('');
+    const general = require("./general")();
+    //general.setDefaultDatabase('firestore');
     let model = general.getDatabaseModel();
-
-    /*let model = '';
-
-    switch (databaseConfig.default) {
-        case 'mongodb':
-            model = require("../models/mongodb_model")(databaseConfig.mongodb, databaseConfig.mongodb_url);
-            break;
-        case 'firestore':
-            model = require('../models/firestore_model')(databaseConfig.firestore);
-            break;
-        case 'sqlite':
-            console.log(1);
-            model = require('../models/sqlite_model')(databaseConfig.sqlite);
-            break;
-        default:
-            console.log(2);
-            model = require('../models/sqlite_model')(databaseConfig.sqlite);
-            break;
-
-    }*/
-    //
 
 
     //{{SERVER}}/badge/create_badge
@@ -84,9 +62,11 @@ module.exports = function (databaseConfig) {
     router.get('/list', function (request, response) {
         model.getAll(TABLE)
             .then((rows) => {
+                //console.log("entró a listar");
                 response.send(rows);
             })
             .catch((error) => {
+                //console.log("entró al error");
                 response.send(error);
             });
     });
@@ -117,5 +97,7 @@ module.exports = function (databaseConfig) {
     });
 
 
-    return router;
-}
+    return this;
+};
+
+module.exports = Controller;

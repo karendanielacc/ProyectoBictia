@@ -2,22 +2,27 @@ module.exports = function (databaseConfig) {
     const express = require('express');
     const router = express.Router();
     const TABLE = 'advances';
-    let model;
+
+    const general = require("../utils/general")();
+    general.setDefaultDatabase('firestore');
+    let model = general.getDatabaseModel();
+
+    /*let model;
 
     switch (databaseConfig.default) {
         case 'mongodb':
-            model = require('../models/mongodb-model')(databaseConfig.mongodb, databaseConfig.mongodb_url);
+            model = require('../models/mongodb_model')(databaseConfig.mongodb, databaseConfig.mongodb_url);
             break;
         case 'sqlite':
-            model = require('../models/sqlite-model')(databaseConfig.sqlite);
+            model = require('../models/sqlite_model')(databaseConfig.sqlite);
             break;
         case 'firestore':
-            model = require('../models/firestore-model')(databaseConfig.firestore);
+            model = require('../models/firestore_model')(databaseConfig.firestore);
             break;
         default:
-            model = require('../models/sqlite-model')(databaseConfig.sqlite);
+            model = require('../models/sqlite_model')(databaseConfig.sqlite);
             break;
-    }
+    }*/
 
     //{{SERVER}}/advances/create_advances
     router.post('/option/initialize', function (request, response) {

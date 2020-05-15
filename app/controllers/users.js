@@ -2,7 +2,12 @@ module.exports = function (databaseConfig) {
     const express = require('express');
     const router = express.Router();
     const TABLE = "users";
-    let model = '';
+
+    const general = require("../utils/general")();
+    //general.setDefaultDatabase('');
+    let model = general.getDatabaseModel();
+
+    /*let model = '';
 
     switch (databaseConfig.default) {
         case 'mongodb':
@@ -18,7 +23,7 @@ module.exports = function (databaseConfig) {
             model = require('../models/sqlite_model')(databaseConfig.sqlite);
             break;
 
-    }
+    }*/
     //
 
 

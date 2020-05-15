@@ -3,10 +3,11 @@ const SQLiteModel = function (sqlite) {
     this.getAll = function (table){
         return new Promise((resolve, reject)=>{
             sqlite.serialize(function(){
-                console.log("select * desde sqlite");
+                //console.log("select * desde sqlite");
                 sqlite.all("SELECT * FROM "+table, function(error, rows){
                     if(error){
-                        resolve(error);
+                        //console.log("error select * from sqlite "+table);
+                        reject(error);
                     }else{
                         resolve(rows);
                     }
