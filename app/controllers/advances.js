@@ -4,7 +4,7 @@ module.exports = function (databaseConfig) {
     const TABLE = 'advances';
 
     const general = require("../utils/general")();
-    general.setDefaultDatabase('firestore');
+    general.setDefaultDatabase('sqlite');
     let model = general.getDatabaseModel();
 
     /*let model;

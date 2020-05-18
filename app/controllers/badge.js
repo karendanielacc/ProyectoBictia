@@ -1,111 +1,90 @@
 module.exports = function (databaseConfig) {
 
-    /*const TABLE = "badge";
-    const controller = require('../utils/controller');
-    controller.call(this,[TABLE]);
-    
-    return controller;*/
     const express = require('express');
     const router = express.Router();
     const TABLE = "badge";
-
-    var jwt = require('jsonwebtoken');
 
     const general = require("../utils/general")();
     //general.setDefaultDatabase('mongodb');
     let model = general.getDatabaseModel();
 
-    /*let model = '';
-
-    switch (databaseConfig.default) {
-        case 'mongodb':
-            model = require("../models/mongodb_model")(databaseConfig.mongodb, databaseConfig.mongodb_url);
-            break;
-        case 'firestore':
-            model = require('../models/firestore_model')(databaseConfig.firestore);
-            break;
-        case 'sqlite':
-            console.log(1);
-            model = require('../models/sqlite_model')(databaseConfig.sqlite);
-            break;
-        default:
-            console.log(2);
-            model = require('../models/sqlite_model')(databaseConfig.sqlite);
-            break;
-
-    }*/
-    //
-
 
     //{{SERVER}}/badge/create_badge
     router.post('/initialize', function (request, response) {
-        model.initialize(TABLE, request.body)
-            .then((rows) => {
-                response.send(rows);
-            })
-            .catch((error) => {
-                response.send(error);
-            })
+        if (general.validateLogin(request)) {
+            model.initialize(TABLE, request.body)
+                .then((rows) => {
+                    response.send(rows);
+                })
+                .catch((error) => {
+                    response.send(error);
+                })
+        } else {
+            response.send({ error: 'No se ha enviado ningun token' });
+        }
     });
 
     //{{SERVER}}/badge/delete_badge
     router.get('/option/clean', function (request, response) {
-        model.clean(TABLE)
-            .then((message) => {
-                response.send(message);
-            })
-            .catch((error) => {
-                response.send(error);
-                console.error(error);
-            });
+        if (general.validateLogin(request)) {
+            model.clean(TABLE)
+                .then((message) => {
+                    response.send(message);
+                })
+                .catch((error) => {
+                    response.send(error);
+                    console.error(error);
+                });
+        } else {
+            response.send({ error: 'No se ha enviado ningun token' });
+        }
         /**/
     });
 
     //{{SERVER}}/badge/insert_badge
     router.post('/insert', function (request, response) {
-        model.create(TABLE, request.body)
-            .then((rows) => {
-                response.send(rows);
-            })
-            .catch((error) => {
-                console.error(error);
-                response.send(error);
-            });
-
+        if (general.validateLogin(request)) {
+            model.create(TABLE, request.body)
+                .then((rows) => {
+                    response.send(rows);
+                })
+                .catch((error) => {
+                    console.error(error);
+                    response.send(error);
+                });
+        } else {
+            response.send({ error: 'No se ha enviado ningun token' });
+        }
     });
 
     //{{SERVER}}/badge/insert_badge
     router.put('/:id', function (request, response) {
-        let id = request.params.id;
-        model.update(TABLE, request.body, id)
-            .then((row) => {
-                response.send(row);
-            })
-            .catch((error) => {
-                console.log(error);
-                response.send(error);
-            });
+        if (general.validateLogin(request)) {
+            let id = request.params.id;
+            model.update(TABLE, request.body, id)
+                .then((row) => {
+                    response.send(row);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    response.send(error);
+                });
+        } else {
+            response.send({ error: 'No se ha enviado ningun token' });
+        }
 
     });
 
     //{{SERVER}}/badge/list_badge
     router.get('/list', function (request, response) {
-        let token = request.headers['auth-jwt'];
-        if (token) {
-            jwt.verify(token, 'bictia', function (err, decoded) {
-                if (err) {
-                    response.send({ error: 'el token utilizado no es válido', message: err });
-                } else {
-                    model.getAll(TABLE)
-                        .then((rows) => {
-                            response.send(rows);
-                        })
-                        .catch((error) => {
-                            response.send(error);
-                        });
-                }
-            });
-
+        if (general.validateLogin(request)) {
+            model.getAll(TABLE)
+                .then((rows) => {
+                    response.send(rows);
+                })
+                .catch((error) => {
+                    response.send(error);
+                });
         } else {
             response.send({ error: 'No se ha enviado ningun token' });
         }
@@ -115,26 +94,35 @@ module.exports = function (databaseConfig) {
     //{{SERVER}}/badge/list_badge
     router.get('/:id', function (request, response) {
         let id = request.params.id;
-        model.getById(TABLE, id)
-            .then((row) => {
-                response.send(row);
-            })
-            .catch((error) => {
-                console.error(error);
-                response.send(error);
-            });
+        if (general.validateLogin(request)) {
+            model.getById(TABLE, id)
+                .then((row) => {
+                    response.send(row);
+                })
+                .catch((error) => {
+                    console.error(error);
+                    response.send(error);
+                });
+        } else {
+
+        }
+
     });
 
     //{{SERVER}}/badge/list_badge
     router.delete('/:id', function (request, response) {
         let id = request.params.id;
-        model.delete(TABLE, id)
-            .then((message) => {
-                response.send(message);
-            })
-            .catch((error) => {
-                response.send(error);
-            });
+        if (general.validateLogin(request)) {
+            model.delete(TABLE, id)
+                .then((message) => {
+                    response.send(message);
+                })
+                .catch((error) => {
+                    response.send(error);
+                });
+        } else {
+            response.send({ error: 'No se ha enviado ningun token' });
+        }
     });
 
 

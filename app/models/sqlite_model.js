@@ -6,8 +6,11 @@ const SQLiteModel = function (sqlite) {
                 //console.log("select * desde sqlite");
                 sqlite.all("SELECT * FROM "+table, function(error, rows){
                     if(error){
-                        //console.log("error select * from sqlite "+table);
-                        reject(error);
+                        let info= {
+                            message:error.message,
+                            table:table
+                        }
+                        reject(info);
                     }else{
                         resolve(rows);
                     }
@@ -23,7 +26,12 @@ const SQLiteModel = function (sqlite) {
             sqlite.serialize(function () {
                 sqlite.all("SELECT * FROM " + table + " WHERE id = '" + id + "'", function (error, rows) {
                     if (error) {
-                        resolve(error);
+                        let info= {
+                            message:error.message,
+                            table:table,
+                            id:id
+                        }
+                        reject(info);
                     } else {
                         resolve(rows[0]);
                     }
