@@ -1,10 +1,11 @@
+const config = require('../../config.json');
 module.exports = function (databaseConfig) {
     const express = require('express');
     const router = express.Router();
     const TABLE = "users";
 
     const general = require("../utils/general")();
-    //general.setDefaultDatabase('');
+    general.setDefaultDatabase(config.database.default);
     let model = general.getDatabaseModel();
 
     /*let model = '';

@@ -4,13 +4,13 @@
         "port": 3456
     },
     "database":{
-        "default":"sqlite",
+        "default":"firestore",
         "mongodb":{
             "databaseName":"myproject",
             "url":"mongodb://localhost:27017"
         },
         "firebase":{
-            "url":"https://proyecto-bictia.firebaseio.com"
+            "url": "https://devlearning-2c9c9.firebaseio.com"
         }
     },
     "jwt":{
