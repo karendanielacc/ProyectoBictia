@@ -1,3 +1,4 @@
+const config = require('../../config.json');
 module.exports = function (databaseConfig) {
 
     const express = require('express');
@@ -5,7 +6,7 @@ module.exports = function (databaseConfig) {
     const TABLE = "badge";
 
     const general = require("../utils/general")();
-    //general.setDefaultDatabase('mongodb');
+    general.setDefaultDatabase(config.database.default);
     let model = general.getDatabaseModel();
 
 
