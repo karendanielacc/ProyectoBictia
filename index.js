@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 let badge_controller = require('./app/controllers/badge')();
 //let badge_controller = require('./app/controllers/badge_firebase')();
 //let usersController = require('./app/controllers/users')();
+let challengesController=require('./app/controllers/challenges')();
 let usersController = require('./app/controllers/users_firebase')();
 let trainingsController = require('./app/controllers/trainings')();
 let advancesController = require('./app/controllers/advances')();   // New
@@ -24,6 +25,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use('/advances', advancesController);  // New
 app.use('/users', usersController);
 app.use('/trainings', trainingsController);
+app.use('/challenges', challengesController);
 app.use('/badge', badge_controller);
 app.use('/login', loginController);
 
