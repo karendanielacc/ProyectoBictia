@@ -12,15 +12,16 @@ const bodyParser = require('body-parser');
 
 let badge_controller = require('./app/controllers/badge')();
 //let badge_controller = require('./app/controllers/badge_firebase')();
-let usersController = require('./app/controllers/users')();
+//let usersController = require('./app/controllers/users')();
+let usersController = require('./app/controllers/users_firebase')();
 let trainingsController = require('./app/controllers/trainings')();
 let advancesController = require('./app/controllers/advances')();   // New
 let loginController = require('./app/controllers/login')();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-app.use('/advances', advancesController);  // New
 
+app.use('/advances', advancesController);  // New
 app.use('/users', usersController);
 app.use('/trainings', trainingsController);
 app.use('/badge', badge_controller);

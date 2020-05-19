@@ -50,6 +50,7 @@ const General = function () {
                 model = require("../models/mongodb_model")(General.mongoDB.client, General.mongoDB.url);
                 break;
             case 'firestore':
+                console.log("entra a firestore");
                 model = require('../models/firestore_model')(General.firebase.firestore());
                 break;
             case 'sqlite':
