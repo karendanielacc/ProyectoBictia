@@ -1,35 +1,32 @@
 const SQLiteModel = function (sqlite) {
 
-    this.getAll = function (table){
-        return new Promise((resolve, reject)=>{
-            sqlite.serialize(function(){
-                //console.log("select * desde sqlite");
-                sqlite.all("SELECT * FROM "+table, function(error, rows){
-                    if(error){
-                        let info= {
-                            message:error.message,
-                            table:table
+    this.getAll = function (table) {
+        return new Promise((resolve, reject) => {
+            sqlite.serialize(function () {
+                sqlite.all("SELECT * FROM " + table, function (error, rows) {
+                    if (error) {
+                        let info = {
+                            message: error.message,
+                            table: table
                         }
                         reject(info);
-                    }else{
+                    } else {
                         resolve(rows);
                     }
                 });
             });
         });
-        
     };
 
-    //{{SERVER}}/badge/list_badge
     this.getById = function (table, id) {
         return new Promise((resolve, reject) => {
             sqlite.serialize(function () {
-                sqlite.all("SELECT * FROM " + table + " WHERE id = '" + id + "'", function (error, rows) {
+                sqlite.all("SELECT * FROM " + table + " WHERE id=" + id, function (error, rows) {
                     if (error) {
-                        let info= {
-                            message:error.message,
-                            table:table,
-                            id:id
+                        let info = {
+                            message: error.message,
+                            table: table,
+                            id: id
                         }
                         reject(info);
                     } else {
@@ -40,121 +37,144 @@ const SQLiteModel = function (sqlite) {
         });
     };
 
-    this.create = function(table, params){
-        return new Promise((resolve, reject)=>{
-            sqlite.serialize(function(){
+    this.create = function (table, params) {
+        return new Promise((resolve, reject) => {
+            sqlite.serialize(function () {
+
+                let query = 'INSERT INTO ' + table + ' ('
                 let columnNames = '';
                 let columnValues = '';
-                let query = 'INSERT INTO '+table+' (';
-                for(let [key, value] of Object.entries(params)){
-                    columnNames += "'"+key+"', "
-                    if(isNaN(value)){
-                        columnValues+= "'"+value+"', ";
-                    }else{
-                        columnValues+= value+", ";
+                for (let [key, value] of Object.entries(params)) {
+                    columnNames += "'" + key + "', "
+                    if (isNaN(value)) {
+                        columnValues += "'" + value + "', ";
+                    } else {
+                        columnValues += value + ", ";
                     }
                 }
-
-                query+=columnNames.substring(0, columnNames.length-2);
-                query+=" ) VALUES ( ";
-                query+=columnValues.substring(0, columnValues.length-2);
-                query+=");";
-
-                console.log(query);
-
-                try{
-                    sqlite.run(query);
-                    resolve(params);
-                }catch(error){
-                    reject(error);
-                }
-            });
-        });
-    }
-
-
-
-    this.initialize = function(table, params){
-        return new Promise ((resolve, reject)=>{
-            sqlite.serialize(function(){
-                let query = 'CREATE TABLE IF NOT EXISTS '+table +' (id INTEGER PRIMARY KEY, ';
-                let element ='';
-                for(let [key, value] of Object.entries(params)){
-                    element+= key + ' '+value+', '
-                }
-                query+=element.substring(0, element.length-2);
-                query+=')';
+                query += columnNames.substring(0, columnNames.length - 2);
+                query += ') VALUES (';
+                query += columnValues.substring(0, columnValues.length - 2);
+                query += ');';
 
                 console.log(query);
+                sqlite.run(query, function (response, error) {
+                    if (error) {
+                        let info = {
+                            message: error.message,
+                            table: table,
+                            params: params
+                        }
+                        reject(info);
+                    } else {
+                        resolve(params);
+                    }
 
-                try{
-                    sqlite.run(query);
-                    params.id = 'INTEGER PRIMARY KEY';
-                    resolve(params);
-                }catch(error){
-                    reject(error);
-                }
-            });
-        })
-    }
-
-    this.clean = function(table){
-        return new Promise((resolve, reject)=>{
-            sqlite.serialize(function(){
-                let query = 'DROP TABLE IF EXISTS '+table;
-                try{
-                    sqlite.run(query);
-                    resolve('Se limpió la BD '+table);
-                }catch(error){
-                    reject(error);
-                }
+                });
             });
         });
-    }
+    };
 
-    this.delete = function(table, id){
-        return new Promise((resolve, reject)=>{
-            sqlite.serialize(function(){
-                let query = 'DELETE FROM '+table+' WHERE id = '+id;
-                try{
-                    sqlite.run(query);
-                    resolve('Se ha eliminado '+id);
-                }catch(error){
-                    reject(error);
-                }
-            });
-        });
-    }
+    this.update = function (table, params, id) {
+        return new Promise((resolve, reject) => {
+            sqlite.serialize(function () {
 
-    this.update = function(table, params, id){
-        return new Promise((resolve, reject)=>{
-            sqlite.serialize(function(){
-
-                let query = 'UPDATE '+table+' SET ';
+                let query = 'UPDATE ' + table + ' SET '
                 let element = '';
-                for(let [key, value] of Object.entries(params)){
-                    element+=key+' = ';
-                    if(isNaN(value)){
-                        element+="'"+value+"', ";
-                    }else{
-                        element+=value+", ";
+                for (let [key, value] of Object.entries(params)) {
+                    element += key + '=';
+                    if (isNaN(value)) {
+                        element += '"' + value + '", ';
+                    } else {
+                        element += value + ', ';
                     }
                 }
-                query+=element.substring(0, element.length-2);
-                //query+=')';
-                console.log(query);
-
-                try{
-                    sqlite.run(query);
+                query += element.substring(0, element.length - 2);
+                query += ' WHERE id=' + id;
+                sqlite.run(query, function (response, error) {
+                    if (error) {
+                        let info = {
+                            message: error.message,
+                            table: table,
+                            params: params,
+                            id: id
+                        }
+                        reject(info);
+                    }
                     resolve(params);
-                }catch(error){
-                    reject(error);
-                }
+                });
             });
         });
-    }
+    };
+
+    this.delete = function (table, id) {
+        return new Promise((resolve, reject) => {
+            sqlite.serialize(function () {
+
+                let query = 'DELETE FROM ' + table + ' WHERE id=' + id;
+                console.log(query);
+                sqlite.run(query, function (response, error) {
+                    if (error) {
+                        let info = {
+                            message: error.message,
+                            table: table,
+                            id: id
+                        }
+                        reject(info);
+                    }
+                    resolve('Se ha eliminado ' + id);
+                });
+            });
+        });
+    };
+
+    this.clean = function (table) {
+        return new Promise((resolve, reject) => {
+            sqlite.serialize(function () {
+                let query = 'DROP TABLE IF EXISTS ' + table;
+                console.log(query);
+                sqlite.run(query, function (response, error) {
+                    if (error) {
+                        let info = {
+                            message: error.message,
+                            table: table
+                        }
+                        reject(info);
+                    }
+                    resolve('Se limpió la base de datos ' + table);
+                });
+            });
+        });
+    };
+
+    this.initialize = function (table, params) {
+        return new Promise((resolve, reject) => {
+            sqlite.serialize(function () {
+                let query = 'CREATE TABLE IF NOT EXISTS  ' + table + ' (id INTEGER PRIMARY KEY, '
+                let element = '';
+                for (let [key, value] of Object.entries(params)) {
+                    element += key + ' ' + value + ', ';
+                }
+                query += element.substring(0, element.length - 2);
+                query += ');'
+                console.log(query);
+
+                sqlite.run(query, function (response, error) {
+                    if (error) {
+                        let info = {
+                            message: error.message,
+                            table: table,
+                            params: params
+                        }
+                        reject(info);
+                    }
+                    resolve(params);
+                });
+            });
+        });
+    };
 
     return this;
-}
+};
 
 module.exports = SQLiteModel;

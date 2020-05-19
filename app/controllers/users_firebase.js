@@ -32,7 +32,7 @@ const UserFirebase = function(){
     });
 
     router.post('/',function(request,response){
-        let id = request.params.id;
+        //let id = request.params.id;
         admin.auth().createUser(request.body).then(function(users){
             response.send(users.uid);
         }).catch(function(error){
