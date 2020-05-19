@@ -1,7 +1,7 @@
 {
     "app": {
         "nombre":"Corriendo DevLearning",
-        "port": 3456
+        "port": 3000
     },
     "database":{
         "default":"firestore",

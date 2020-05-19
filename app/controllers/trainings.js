@@ -8,29 +8,6 @@ module.exports = function (databaseConfig) {
     general.setDefaultDatabase(config.database.default);
     let model = general.getDatabaseModel();
 
-    /*let model = '';
-
-    switch (databaseConfig.default) {
-        case 'mongodb':
-            model = require("../models/mongodb_model")(databaseConfig.mongodb, databaseConfig.mongodb_url);
-            break;
-        case 'firestore':
-            model = require('../models/firestore_model')(databaseConfig.firestore);
-            break;
-        case 'sqlite':
-            console.log(1);
-            model = require('../models/sqlite_model')(databaseConfig.sqlite);
-            break;
-        default:
-            console.log(2);
-            model = require('../models/sqlite_model')(databaseConfig.sqlite);
-            break;
-
-    }*/
-    //
-
-
-    //{{SERVER}}/badge/create_badge
     router.post('/initialize', function (request, response) {
         model.initialize(TABLE, request.body)
             .then((rows) => {
