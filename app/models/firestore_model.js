@@ -20,23 +20,37 @@ const FirestoreModel = function (firestone) {
     this.getById = function (table, id) {
         return new Promise((resolve, reject) => {
             firestone.collection(table).doc(id).get()
-                .then((registro) => {
-                    if (registro.exists) {
-                        let respuesta = registro.data();
-                        respuesta.id = registro.id;
-                    }
+            .then((registro)=>{
+                if (registro.exists){
+                    let respuesta = registro.data();
+                    respuesta.id = registro.id;
                     resolve(respuesta);
-                })
-                .catch((error) => {
-                    reject({ error: 'El documento en la colección ' + table + ' no existe' });
-                });
+                }else{
+                    reject({error: 'El elemento en la colección ' + table+' no existe'});
+                }                
+            })
+            .catch((error)=>{
+                reject(error);
+            });
         });
-
     };
 
     this.create = function (table, params) {
         return new Promise((resolve, reject) => {
             firestone.collection(table).add(params)
+                .then((respuesta) => {
+                    params.id = respuesta.id;
+                    resolve(params);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    };
+
+    this.createid = function (table, params, id) {
+        return new Promise((resolve, reject) => {
+            firestone.collection(table).doc(id).set(params)
                 .then((respuesta) => {
                     params.id = respuesta.id;
                     resolve(params);
@@ -86,6 +100,8 @@ const FirestoreModel = function (firestone) {
         });
 
     };
+
+
 
     return this;
 };
