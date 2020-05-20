@@ -9,13 +9,18 @@ const port = process.env.PORT ? process.env.PORT : config.app.port ? config.app.
 //URL Encode support for POST, PUT methods
 const bodyParser = require('body-parser');
 
+//controlador user con auth
+let usersController = require('./app/controllers/users_firebase')();
+
 
 let badge_controller = require('./app/utils/controller')('badge');
 let challengesController=require('./app/utils/controller')('challenge');
-let usersController = require('./app/controllers/users_firebase')();
 let trainingsController = require('./app/utils/controller')('training');
 let advancesController = require('./app/utils/controller')('advance');   // New
+
 let loginController = require('./app/utils/controller')();
+
+//Relación tablas
 let badge_user_controller = require('./app/utils/controller')('badge_user');
 
 app.use(bodyParser.json());

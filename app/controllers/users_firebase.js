@@ -87,13 +87,15 @@ const UserFirebase = function(databaseconfig){
             model.delete(TABLE, id)
             .then((message) => {
                 response.send(message);
+                console.log('Se eliminó');
             })
             .catch((error) => {
                 response.send(error);
+                console.log('User not found!');
             });
-            response.send('Se eliminó');
         }).catch(function(error){
             response.send(error);
+            console.log('User not found!');
         });
     });
 
