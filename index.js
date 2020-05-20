@@ -10,25 +10,24 @@ const port = process.env.PORT ? process.env.PORT : config.app.port ? config.app.
 const bodyParser = require('body-parser');
 
 
-let badge_controller = require('./app/controllers/badge')();
-//let badge_controller = require('./app/controllers/badge_firebase')();
-//let usersController = require('./app/controllers/users')();
-let challengesController=require('./app/controllers/challenges')();
+let badge_controller = require('./app/utils/controller')('badge');
+let challengesController=require('./app/utils/controller')('challenge');
 let usersController = require('./app/controllers/users_firebase')();
-let trainingsController = require('./app/controllers/trainings')();
-let advancesController = require('./app/controllers/advances')();   // New
-let loginController = require('./app/controllers/login')();
+let trainingsController = require('./app/utils/controller')('training');
+let advancesController = require('./app/utils/controller')('advance');   // New
+let loginController = require('./app/utils/controller')();
+let badge_user_controller = require('./app/utils/controller')('badge_user');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-app.use('/advances', advancesController);  // New
+app.use('/advance', advancesController);  // New
 app.use('/users', usersController);
-app.use('/trainings', trainingsController);
-app.use('/challenges', challengesController);
+app.use('/training', trainingsController);
+app.use('/challenge', challengesController);
 app.use('/badge', badge_controller);
 app.use('/login', loginController);
-
+app.use('/badge_user', badge_user_controller);
 
 app.listen(port, function(){
     console.log("Corriendo: "+config.app.nombre);

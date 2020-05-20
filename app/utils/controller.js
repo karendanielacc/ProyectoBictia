@@ -1,9 +1,10 @@
+const config = require('../../config.json');
 const Controller = function(TABLE){
     const express = require('express');
     const router = express.Router();
 
     const general = require("./general")();
-    //general.setDefaultDatabase('firestore');
+    general.setDefaultDatabase(config.database.default);
     let model = general.getDatabaseModel();
 
 
@@ -97,7 +98,7 @@ const Controller = function(TABLE){
     });
 
 
-    return this;
+    return router;
 };
 
 module.exports = Controller;
