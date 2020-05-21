@@ -11,8 +11,8 @@ const Controller = function (TABLE) {
     //{{SERVER}}/users/ 
     //Lista todos los usuarios
     router.get('/', function (request, response) {
-
-        if (general.validateLogin(request))
+        let validationToken = general.validateLogin(request);
+        if (validationToken.auth) {
             model.getAll(TABLE)
                 .then((rows) => {
                     response.send(rows);
@@ -20,14 +20,18 @@ const Controller = function (TABLE) {
                     console.error(error);
                     response.send(error);
                 });
-        else response.send({ error: 'No se ha enviado un token' });
+        } else {
+            response.send({ error: 'No se ha enviado un token', message: validationToken.message });
+        }
+
     });
 
     //{{SERVER}}/users/id 
     //Trae un usuario por ID
     router.get('/:id', function (request, response) {
         let id = request.params.id;
-        if (general.validateLogin(request))
+        let validationToken = general.validateLogin(request);
+        if (validationToken.auth) {
             model.getById(TABLE, id)
                 .then((row) => {
                     response.send(row);
@@ -35,13 +39,16 @@ const Controller = function (TABLE) {
                     console.error(error);
                     response.send(error);
                 });
-        else response.send({ error: 'No se ha enviado un token' });
+        } else {
+            response.send({ error: 'No se ha enviado un token' });
+        }
     });
 
     //{{SERVER}}/users/
     //Crea un usuario
     router.post('/', function (request, response) {
-        if (general.validateLogin(request))
+        let validationToken = general.validateLogin(request);
+        if (validationToken.auth) {
             model.create(TABLE, request.body)
                 .then((object) => {
                     response.send(object)
@@ -49,14 +56,17 @@ const Controller = function (TABLE) {
                     console.error(error);
                     response.send(error);
                 });
-        else response.send({ error: 'No se ha enviado un token' });
+        } else {
+            response.send({ error: 'No se ha enviado un token' });
+        }
     });
 
     //{{SERVER}}/users/:id
     //Edita un usuario
     router.put('/:id', function (request, response) {
         let id = request.params.id;
-        if (general.validateLogin(request))
+        let validationToken = general.validateLogin(request);
+        if (validationToken.auth) {
             model.update(TABLE, request.body, id)
                 .then((row) => {
                     response.send(row);
@@ -64,7 +74,9 @@ const Controller = function (TABLE) {
                     console.error(error);
                     response.send(error);
                 });
-        else response.send({ error: 'No se ha enviado un token' });
+        } else {
+            response.send({ error: 'No se ha enviado un token' });
+        }
 
     });
 
@@ -73,7 +85,8 @@ const Controller = function (TABLE) {
     //Elimina un usuario
     router.delete('/:id', function (request, response) {
         let id = request.params.id;
-        if (general.validateLogin(request))
+        let validationToken = general.validateLogin(request);
+        if (validationToken.auth) {
             model.delete(TABLE, id)
                 .then((message) => {
                     response.send(message);
@@ -81,14 +94,17 @@ const Controller = function (TABLE) {
                     console.error(error);
                     response.send(error);
                 });
-        else response.send({ error: 'No se ha enviado un token' });
+        } else {
+            response.send({ error: 'No se ha enviado un token' });
+        }
     });
 
 
     //{{SERVER}}/users/delete_users
     //Limpiar tabla
     router.get('/option/clean', function (request, response) {
-        if (general.validateLogin(request))
+        let validationToken = general.validateLogin(request);
+        if (validationToken.auth) {
             model.clean(TABLE)
                 .then((message) => {
                     response.send(message)
@@ -96,12 +112,15 @@ const Controller = function (TABLE) {
                     console.error(error);
                     response.send(error);
                 });
-        else response.send({ error: 'No se ha enviado un token' });
+        } else {
+            response.send({ error: 'No se ha enviado un token' });
+        }
     });
 
     //{{SERVER}}/users/create_users
     router.post('/option/initialize', function (request, response) {
-        if (general.validateLogin(request))
+        let validationToken = general.validateLogin(request);
+        if (validationToken.auth) {
             model.initialize(TABLE, request.body)
                 .then((message) => {
                     response.send(message)
@@ -109,7 +128,9 @@ const Controller = function (TABLE) {
                     console.error(error);
                     response.send(error);
                 });
-        else response.send({ error: 'No se ha enviado un token' });
+        } else {
+            response.send({ error: 'No se ha enviado un token' });
+        }
     });
 
 

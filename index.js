@@ -11,14 +11,12 @@ const bodyParser = require('body-parser');
 
 //controlador user con auth
 let usersController = require('./app/controllers/users_firebase')();
-
+let loginController = require('./app/controllers/login')();
 
 let badge_controller = require('./app/utils/controller')('badge');
 let challengesController=require('./app/utils/controller')('challenge');
 let trainingsController = require('./app/utils/controller')('training');
 let advancesController = require('./app/utils/controller')('advance');   // New
-
-let loginController = require('./app/utils/controller')();
 
 //Relación tablas
 let badge_user_controller = require('./app/utils/controller')('badge_user');
