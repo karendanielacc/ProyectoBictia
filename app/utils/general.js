@@ -18,8 +18,8 @@ const General = function () {
     }
 
     if (typeof General.sqlite == 'undefined') {
-        const sqlite3 = require('sqlite3').verbose();
-        General.sqlite = new sqlite3.Database('./db/db.bictia');
+       // const sqlite3 = require('sqlite3').verbose();
+        //General.sqlite = new sqlite3.Database('./db/db.bictia');
     }
 
     if (typeof General.mongoDB == 'undefined') {
@@ -59,7 +59,7 @@ const General = function () {
                 break;
             default:
                 console.log("entra a default");
-                model = require('../models/sqlite_model')(General.sqlite);
+                model = require('../models/firestore_model')(General.firebase.firestore());
                 break;
         }
         return model;
