@@ -48,7 +48,6 @@ const UserFirebase = function(databaseconfig){
 
 
     router.post('/',function(request,response){
-        
         admin.auth().createUser(request.body).then(function(users){
             let id = users.uid;
             model.createid(TABLE, request.body, id)
