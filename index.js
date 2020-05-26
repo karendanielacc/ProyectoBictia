@@ -24,10 +24,7 @@ let badge_user_controller = require('./app/utils/controller')('badge_user');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-app.use('/',(request, response)=>{
 
-    response.send('Bienvenido a la API DevLearning...');
-}); 
 
 app.use('/advance', advancesController);  // New
 app.use('/users', usersController);
@@ -36,6 +33,11 @@ app.use('/challenge', challengesController);
 app.use('/badge', badge_controller);
 app.use('/login', loginController);
 app.use('/badge_user', badge_user_controller);
+
+app.use('/',(request, response)=>{
+
+    response.send('Bienvenido a la API DevLearning...');
+}); 
 
 app.listen(port, function(){
     console.log("Corriendo: "+config.app.nombre);
