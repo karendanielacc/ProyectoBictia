@@ -24,6 +24,11 @@ let badge_user_controller = require('./app/utils/controller')('badge_user');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+app.use('/',(request, response)=>{
+
+    response.send('Bienvenido a la API DevLearning...');
+}); 
+
 app.use('/advance', advancesController);  // New
 app.use('/users', usersController);
 app.use('/training', trainingsController);
