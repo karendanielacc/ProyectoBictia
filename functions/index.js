@@ -24,7 +24,7 @@ const functions = require('firebase-functions');
         });
 
         let emailOptions = {
-            from: '"Curso Bictia 🤖🏫" <bictia.cohorte2@gmail.com>',
+            from: '"Curso Bictia 🤖🏫" <danielacuervo4565@gmail.com>',
             to: information.email,
             subject: 'Registro exitoso',
             text: 'Hello ✔',
