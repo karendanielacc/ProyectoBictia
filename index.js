@@ -20,12 +20,13 @@ let advancesController = require('./app/utils/controller')('advance');   // New
 
 //Relación tablas
 let badge_user_controller = require('./app/utils/controller')('badge_user');
+let heroController = require('./app/controllers/heroes')();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 
-
+app.use('/api',heroController);
 app.use('/advance', advancesController);  // New
 app.use('/users', usersController);
 app.use('/training', trainingsController);
@@ -38,6 +39,7 @@ app.use('/',(request, response)=>{
 
     response.send('Bienvenido a la API DevLearning...');
 }); 
+
 
 app.listen(port, function(){
     console.log("Corriendo: "+config.app.nombre);
