@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const config = require('./config.json');
+const cors = require('cors');
 //const config2 = require('./app/utils/config');
 //son equivalentes
 const port = process.env.PORT ? process.env.PORT : config.app.port ? config.app.port : 3456;
@@ -24,7 +25,7 @@ let heroController = require('./app/utils/controller')('heroes');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-
+app.use(cors());
 
 app.use('/heroes',heroController);
 app.use('/advance', advancesController);  // New
