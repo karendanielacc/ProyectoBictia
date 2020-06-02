@@ -12,7 +12,8 @@ const Controller = function (TABLE) {
     //Lista todos los usuarios
     router.get('/', function (request, response) {
         let validationToken = general.validateLogin(request);
-        if (validationToken.auth) {
+        //if (validationToken.auth) {
+        if (true) {
             model.getAll(TABLE)
                 .then((rows) => {
                     response.send(rows);
@@ -31,7 +32,8 @@ const Controller = function (TABLE) {
     router.get('/:id', function (request, response) {
         let id = request.params.id;
         let validationToken = general.validateLogin(request);
-        if (validationToken.auth) {
+        //if (validationToken.auth) {
+        if (true) {
             model.getById(TABLE, id)
                 .then((row) => {
                     response.send(row);
@@ -86,7 +88,8 @@ const Controller = function (TABLE) {
     router.delete('/:id', function (request, response) {
         let id = request.params.id;
         let validationToken = general.validateLogin(request);
-        if (validationToken.auth) {
+        //if (validationToken.auth) {
+        if (true) {
             model.delete(TABLE, id)
                 .then((message) => {
                     response.send(message);
@@ -104,7 +107,8 @@ const Controller = function (TABLE) {
     //Limpiar tabla
     router.get('/option/clean', function (request, response) {
         let validationToken = general.validateLogin(request);
-        if (validationToken.auth) {
+        //if (validationToken.auth) {
+        if (true) {
             model.clean(TABLE)
                 .then((message) => {
                     response.send(message)
@@ -120,7 +124,8 @@ const Controller = function (TABLE) {
     //{{SERVER}}/users/create_users
     router.post('/option/initialize', function (request, response) {
         let validationToken = general.validateLogin(request);
-        if (validationToken.auth) {
+        //if (validationToken.auth) {
+        if (true) {
             model.initialize(TABLE, request.body)
                 .then((message) => {
                     response.send(message)
