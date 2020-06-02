@@ -48,7 +48,7 @@ const Controller = function (TABLE) {
     //Crea un usuario
     router.post('/', function (request, response) {
         let validationToken = general.validateLogin(request);
-        if (true) {
+        if (validationToken.auth) {
             model.create(TABLE, request.body)
                 .then((object) => {
                     response.send(object)
@@ -66,8 +66,8 @@ const Controller = function (TABLE) {
     router.put('/:id', function (request, response) {
         let id = request.params.id;
         let validationToken = general.validateLogin(request);
-        if (true) {
-            model.update(TABLE, request.body,id)
+        if (validationToken.auth) {
+            model.update(TABLE, request.body, id)
                 .then((row) => {
                     response.send(row);
                 }).catch((error) => {
