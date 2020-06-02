@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const config = require('./config.json');
+const cors = require('cors');
 //const config2 = require('./app/utils/config');
 //son equivalentes
 const port = process.env.PORT ? process.env.PORT : config.app.port ? config.app.port : 3456;
@@ -20,12 +21,27 @@ let advancesController = require('./app/utils/controller')('advance');   // New
 
 //Relación tablas
 let badge_user_controller = require('./app/utils/controller')('badge_user');
+let heroController = require('./app/utils/controller')('heroes');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 
+var whitelist = ['http://localhost','https://devlearning-2c9c9.web.app','*'];
 
+var corsOptions = {
+    origin: function(origin, callback){
+        if(whitelist.indexOf(origin) !== -1){
+            callback(null, true)
+        }else{
+            callback(new Error('Not allowed by CORS'))
+        }
+    }
+};
+
+app.use(cors());
+
+app.use('/heroes',heroController);
 app.use('/advance', advancesController);  // New
 app.use('/users', usersController);
 app.use('/training', trainingsController);
@@ -38,6 +54,7 @@ app.use('/',(request, response)=>{
 
     response.send('Bienvenido a la API DevLearning...');
 }); 
+
 
 app.listen(port, function(){
     console.log("Corriendo: "+config.app.nombre);
