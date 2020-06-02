@@ -12,7 +12,8 @@ const Controller = function (TABLE) {
     //Lista todos los usuarios
     router.get('/', function (request, response) {
         let validationToken = general.validateLogin(request);
-        if (validationToken.auth) {
+        //if (validationToken.auth) {
+        if(true){
             model.getAll(TABLE)
                 .then((rows) => {
                     response.send(rows);

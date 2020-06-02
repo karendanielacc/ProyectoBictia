@@ -18,8 +18,8 @@ const functions = require('firebase-functions');
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'danielacuervo4565@gmail.com', // generated ethereal user
-                pass: 'Kdcc96082819972.', // generated ethereal password
+                user: 'devlearningpro@gmail.com', // generated ethereal user
+                pass: 'devlearning2020', // generated ethereal password
             },
         });
 
