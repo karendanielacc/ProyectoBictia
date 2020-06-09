@@ -21,7 +21,6 @@ const UserFirebase = function(databaseconfig){
             model.getAll(TABLE)
             .then((rows) => {
                 response.send({users_auth:allUsers,users_dabase:rows});
-                //{users_auth:allUsers,users_dabase:rows}
             })
             .catch((error) => {
                 response.send(error);

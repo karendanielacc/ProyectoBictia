@@ -22,6 +22,7 @@ let advancesController = require('./app/utils/controller')('advance');   // New
 //Relación tablas
 let badge_user_controller = require('./app/utils/controller')('badge_user');
 let heroController = require('./app/utils/controller')('heroes');
+let ConsoleController = require('./app/controllers/console')();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -49,6 +50,7 @@ app.use('/challenge', challengesController);
 app.use('/badge', badge_controller);
 app.use('/login', loginController);
 app.use('/badge_user', badge_user_controller);
+app.use('/console',ConsoleController)
 
 app.use('/',(request, response)=>{
 
