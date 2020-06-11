@@ -20,11 +20,6 @@ const functions = require('firebase-functions');
             auth: {
                 user: 'devlearningpro@gmail.com', // generated ethereal user
                 pass: 'devlearning2020', // generated ethereal password
-<<<<<<< HEAD
-=======
-                //user: 'danielacuervo4565@gmail.com', // generated ethereal user
-                //pass: 'Kdcc96082819972.', // generated ethereal password
->>>>>>> 432b584e4e4ba3af9b6b91fc0703def596c6278a
             },
         });
 
