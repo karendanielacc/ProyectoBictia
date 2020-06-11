@@ -35,6 +35,25 @@ const FirestoreModel = function (firestone) {
         });
     };
 
+    this.getByIdUser = function (table, id) {
+        return new Promise((resolve, reject) => {
+            let query = firestone.collection(table).where("user", "==", id);
+
+            query.get().then((registro)=>{
+                if (registro.exists){
+                    let respuesta = registro.data();
+                    respuesta.id = registro.id;
+                    resolve(respuesta);
+                }else{
+                    reject({error: 'El elemento en la colección ' + table+' no existe '+ id});
+                }                
+            })
+            .catch((error)=>{
+                reject(error);
+            });
+        });
+    };
+
     this.create = function (table, params) {
         return new Promise((resolve, reject) => {
             firestone.collection(table).add(params)
