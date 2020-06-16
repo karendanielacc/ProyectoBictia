@@ -46,6 +46,24 @@ const Controller = function (TABLE) {
         }
     });
 
+    //Trae un usuario por ID user
+    router.get('/user/:id', function (request, response) {
+        let id = request.params.id;
+        let validationToken = general.validateLogin(request);
+        //if (validationToken.auth) {
+        if (true) {
+            model.getByIdUser(TABLE, id)
+                .then((row) => {
+                    response.send(row);
+                }).catch((error) => {
+                    console.error(error);
+                    response.send(error);
+                });
+        } else {
+            response.send({ error: 'No se ha enviado un token' });
+        }
+    });
+
     //{{SERVER}}/users/
     //Crea un usuario
     router.post('/', function (request, response) {
