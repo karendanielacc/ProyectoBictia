@@ -39,14 +39,14 @@ const FirestoreModel = function (firestone) {
         return new Promise((resolve, reject) => {
             let query = firestone.collection(table).where("user", "==", id);
 
-            query.get().then((registro)=>{
-                if (registro.exists){
-                    let respuesta = registro.data();
-                    respuesta.id = registro.id;
-                    resolve(respuesta);
-                }else{
-                    reject({error: 'El elemento en la colección ' + table+' no existe '+ id});
-                }                
+            query.get().then((registros)=>{
+                let respuesta = [];
+                    registros.forEach((registro) => {
+                        let elemento = registro.data();
+                        elemento.id = registro.id;
+                        respuesta.push(elemento);
+                    });
+                    resolve(respuesta);               
             })
             .catch((error)=>{
                 reject(error);
