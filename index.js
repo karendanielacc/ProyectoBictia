@@ -21,6 +21,7 @@ let advancesController = require('./app/utils/controller')('advance');   // New
 
 //Relación tablas
 let badge_user_controller = require('./app/utils/controller')('badge_user');
+let challenge_user_controller = require('./app/utils/controller')('challenge_user');
 let heroController = require('./app/utils/controller')('heroes');
 let ConsoleController = require('./app/controllers/console')();
 
@@ -43,13 +44,18 @@ var corsOptions = {
 app.use(cors());
 
 app.use('/heroes',heroController);
+
 app.use('/advance', advancesController);  // New
 app.use('/users', usersController);
 app.use('/training', trainingsController);
 app.use('/challenge', challengesController);
 app.use('/badge', badge_controller);
+
 app.use('/login', loginController);
+
 app.use('/badge_user', badge_user_controller);
+app.use('/challenge_user', challenge_user_controller);
+
 app.use('/console',ConsoleController)
 
 app.use('/',(request, response)=>{
