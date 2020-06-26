@@ -9,20 +9,20 @@ const LoginController = function(){
         let user = request.body.user;
         let password = request.body.password;
 
-        if(user == config.login.username&&password==config.login.password){
+        /*if(user == config.login.username&&password==config.login.password){*/
             let datos = {
                 user:user,
                 date_login: new Date(),
                 type:config.login.type
               }
 
-              //                                                           sg
-              var token = jwt.sign({exp: Math.floor(Date.now() / 1000) + (60 * config.jwt.expire),datos}, config.jwt.secreto);
+              //var token = jwt.sign({exp: Math.floor(Date.now() / 1000) + (60 * config.jwt.expire),datos}, config.jwt.secreto);                                                           sg
+              var token = jwt.sign(datos, config.jwt.secreto);
               response.send({token:token});
 
-        }else{
+       /* }else{
             response.send('Datos incorrectos');
-        }
+        }*/
     });
 
     return router;

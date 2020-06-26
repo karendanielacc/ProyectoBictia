@@ -102,14 +102,15 @@ const UserFirebase = function(databaseconfig){
         let id = request.params.id;
 
         admin.auth().getUser(id).then(function(users){
-            let user =users.toJSON();
+            let user = users.toJSON();
             let customInformation = {
                 user:user,
                 date_login: new Date(),
                 type:'Admin'
             };
+            console.log(customInformation);
             admin.auth().createCustomToken(id, customInformation).then(function(customToken){
-                response.send(customToken);
+                response.send({token:customToken});
             }).catch(function(error){
                 response.send(error);
             });
