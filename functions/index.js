@@ -7,7 +7,7 @@ const functions = require('firebase-functions');
   response.send("Hello from Firebase!");
  });
 
- exports.sendEmail = functions.firestore
+ exports.SendEmail = functions.firestore
     .document('users/{usersId}')
     .onCreate((change, context) => { //https.onRequest((request, response) => {
 
@@ -24,12 +24,12 @@ const functions = require('firebase-functions');
         });
 
         let emailOptions = {
-            from: '"DevLearning 🤖🏫" <devlearningpro@gmail.com    >',
+            from: '"DevLearning 🤖🏫" <devlearningpro@gmail.com>',
             to: information.email,
             subject: 'DevLearning:: Registro exitoso',
             text: 'Bienvenido a DevLearning✔',
             html: '<b>Hola '+information.name+', te damos la bienvenida a la aplicación más cool para aprender a programar!!!</b><br>Soy un texto normal, probando nodemailer<br><img src="https://cdn.pixabay.com/photo/2016/03/09/09/22/workplace-1245776_960_720.jpg" alt="Imagen para probar">'
-        };
+  };
         return transporter.sendMail(emailOptions).then((data) => {
             resolve(data);
             return;
