@@ -17,12 +17,7 @@
     "httpclient": "^0.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.7",
-<<<<<<< HEAD
-    "node": "^14.4.0",
-    "nodemailer": "^6.4.6",
-=======
     "nodemailer": "^6.4.10",
->>>>>>> f8b54dab2ad3ae4133f842054b26dbda2385c63c
     "nodemon": "^2.0.4",
     "request": "^2.88.2"
   }
