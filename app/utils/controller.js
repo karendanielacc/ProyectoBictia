@@ -64,6 +64,23 @@ const Controller = function (TABLE) {
         }
     });
 
+    router.get('/language/:id', function (request, response) {
+        let id = request.params.id;
+        let validationToken = general.validateLogin(request);
+        //if (validationToken.auth) {
+        if (true) {
+            model.getByIdLanguage(TABLE, id)
+                .then((row) => {
+                    response.send(row);
+                }).catch((error) => {
+                    console.error(error);
+                    response.send(error);
+                });
+        } else {
+            response.send({ error: 'No se ha enviado un token' });
+        }
+    });
+
     //{{SERVER}}/users/
     //Crea un usuario
     router.post('/', function (request, response) {
