@@ -17,13 +17,14 @@ let loginController = require('./app/controllers/login')();
 let badge_controller = require('./app/utils/controller')('badge');
 let challengesController=require('./app/utils/controller')('challenge');
 let trainingsController = require('./app/utils/controller')('training');
-let advancesController = require('./app/utils/controller')('advance'); 
+let advancesController = require('./app/utils/controller')('advances'); 
 let uploadsController = require('./app/utils/controller')('uploads'); 
 
 //Relación tablas
 let badge_user_controller = require('./app/utils/controller')('badge_user');
 let challenge_user_controller = require('./app/utils/controller')('challenge_user');
 let uploads_user_controller = require('./app/utils/controller')('uploads_user');
+let advances_user_controller = require('./app/utils/controller')('advances_user');
 
 let heroController = require('./app/utils/controller')('heroes');
 let ConsoleController = require('./app/controllers/console')();
@@ -60,6 +61,7 @@ app.use('/login', loginController);
 app.use('/badge_user', badge_user_controller);
 app.use('/challenge_user', challenge_user_controller);
 app.use('/upload_user',uploads_user_controller);
+app.use('/advance_user',advances_user_controller);
 
 app.use('/console',ConsoleController)
 
