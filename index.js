@@ -25,6 +25,7 @@ let badge_user_controller = require('./app/utils/controller')('badge_user');
 let challenge_user_controller = require('./app/utils/controller')('challenge_user');
 let uploads_user_controller = require('./app/utils/controller')('uploads_user');
 let advances_user_controller = require('./app/utils/controller')('advances_user');
+let trainings_user_controller = require('./app/utils/controller')('training_user');
 
 let heroController = require('./app/utils/controller')('heroes');
 let ConsoleController = require('./app/controllers/console')();
@@ -62,6 +63,7 @@ app.use('/badge_user', badge_user_controller);
 app.use('/challenge_user', challenge_user_controller);
 app.use('/upload_user',uploads_user_controller);
 app.use('/advance_user',advances_user_controller);
+app.use('/training_user',trainings_user_controller);
 
 app.use('/console',ConsoleController)
 
